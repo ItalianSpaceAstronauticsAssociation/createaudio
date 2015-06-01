@@ -88,8 +88,8 @@ fi
 if [ "$NRD" == "YES" ]
 then
 	log "Cleaning background noise..."
-	sox $TMPDIR/$FILEID.wav -n trim 0 0.5 noiseprof tmp.noiseprofile # WE USE THE ORIGINAL FILE FOR HAVING EXTRA NOISE
-	sox $TMPDIR/tmp.02.cutted.wav tmp.03.cleaned.wav noisered tmp.noiseprofile 0.3 # BUT WE CLEAN THE CUTTED FILE
+	sox $TMPDIR/tmp.02.cutted.wav -n trim 0 0.5 noiseprof /tmp/tmp.noiseprofile # WE USE THE ORIGINAL FILE FOR HAVING EXTRA NOISE
+	sox $TMPDIR/tmp.02.cutted.wav tmp.03.cleaned.wav noisered /tmp/tmp.noiseprofile 0.3 # BUT WE CLEAN THE CUTTED FILE
 else
 	log "Skipping cleaning background noise..."
 	mv $TMPDIR/tmp.02.cutted.wav $TMPDIR/tmp.03.cleaned.wav
@@ -99,7 +99,8 @@ fi
 
 # FILTERING WITH NORMALIZER AND COMPRESSION/ENHANCMENT
 log "Compressing and expanding..."
-sox $TMPDIR/tmp.03.cleaned.wav $TMPDIR/tmp.04.compand.wav compand 0.3,0.8 6:-70,-60,-20 -13 -90 0.2 2>> $DEBUGFILE
+#sox $TMPDIR/tmp.03.cleaned.wav $TMPDIR/tmp.04.compand.wav compand 0.02,0.20 5:-60,-40,-10 -5 -90 0.1  >> $DEBUGFILE
+sox $TMPDIR/tmp.03.cleaned.wav $TMPDIR/tmp.04.compand.wav compand 0.1,0.3 -60,-60,-30,-15,-20,-12,-4,-8,-2,-7 -2  >> $DEBUGFILE
 
 # LAME MP3 ENCODING
 log "Encoding in mp3 @ 96 kbps"
@@ -131,5 +132,5 @@ fi
 
 
 # CLEANUP OF THE TEMPORARY FILES
-rm $TMPDIR/tmp.*
-rm $TMPDIR/*.wav
+#rm $TMPDIR/tmp.*
+#rm $TMPDIR/*.wav
